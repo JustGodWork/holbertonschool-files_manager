@@ -19,7 +19,7 @@ class DBClient {
   }
 
   isAlive() {
-    return this.client && this.client.isConnected();
+    return this.client ? this.client.isConnected() : false;
   }
 
   nbUsers() {
