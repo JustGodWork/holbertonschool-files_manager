@@ -16,15 +16,15 @@ class DBClient {
   }
 
   isAlive() {
-    return !!this.db;
+    return this.client && this.client.isConnected();
   }
 
   async nbUsers() {
-    return this.db ? this.db.collection('users').countDocuments() : 0;
+    return this.db.collection('users').countDocuments();
   }
 
   async nbFiles() {
-    return this.db ? this.db.collection('files').countDocuments() : 0;
+    return this.db.collection('files').countDocuments();
   }
 }
 
