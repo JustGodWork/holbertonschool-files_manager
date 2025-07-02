@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import mongo from 'mongodb';
 
 class DBClient {
   constructor() {
@@ -6,9 +6,13 @@ class DBClient {
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
     const url = `mongodb://${host}:${port}`;
-    this.client = new MongoClient(url);
-    this.client.connect().then(() => {
-      this.db = this.client.db(database);
+    mongo(url).then((client) => {
+      this.client = client;
+      this.client.connect().then(() => {
+        this.db = this.client.db(database);
+      }).catch((err) => {
+        console.error(err);
+      });
     }).catch((err) => {
       console.error(err);
     });
