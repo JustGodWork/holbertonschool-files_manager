@@ -110,8 +110,8 @@ class FilesController {
     if (!token) return res.status(401).json({ error: 'Unauthorized' });
     const userId = await redisClient.get(`auth_${token}`);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-    const { parentId } = req.query;
-    const page = parseInt(req.query.page, 10) || 0;
+    const { parentId, page: pageQuery } = req.query;
+    const page = parseInt(pageQuery, 10) || 0;
     const match = { userId: new ObjectId(userId) };
     if (parentId && parentId !== '0') {
       match.parentId = parentId.length === 24 ? new ObjectId(parentId) : parentId;
