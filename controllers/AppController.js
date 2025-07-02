@@ -1,5 +1,5 @@
-import redisClient from '../utils/redis.mjs';
-import dbClient from '../utils/db.mjs';
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 
 class AppController {
   static getStatus(req, res) {

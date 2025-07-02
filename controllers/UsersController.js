@@ -1,5 +1,7 @@
-import dbClient from '../utils/db.mjs';
+import { ObjectId } from 'mongodb';
 import sha1 from 'sha1';
+import dbClient from '../utils/db';
+import redis from '../utils/redis';
 
 class UsersController {
   static async postNew(req, res) {
@@ -19,9 +21,9 @@ class UsersController {
   static async getMe(req, res) {
     const token = req.headers['x-token'];
     if (!token) return res.status(401).json({ error: 'Unauthorized' });
-    const userId = await import('../utils/redis.mjs').then(m => m.default.get(`auth_${token}`));
+    const userId = redis.get(`auth_${token}`);
     if (!userId) return res.status(401).json({ error: 'Unauthorized' });
-    const user = await dbClient.db.collection('users').findOne({ _id: new (await import('mongodb')).ObjectId(userId) });
+    const user = await dbClient.db.collection('users').findOne({ _id: new ObjectId(userId) });
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
     return res.status(200).json({ id: user._id.toString(), email: user.email });
   }
