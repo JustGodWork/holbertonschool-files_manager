@@ -11,16 +11,31 @@ class RedisClient {
     return this.client && this.client.isOpen;
   }
 
-  async get(key) {
-    return await this.client.get(key);
+  get(key) {
+    return new Promise((resolve, reject) => {
+      this.client.get(key, (err, reply) => {
+        if (err) reject(err);
+        resolve(reply);
+      });
+    });
   }
 
-  async set(key, value, duration) {
-    await this.client.set(key, value, { EX: duration });
+  set(key, value, duration) {
+    return new Promise((resolve, reject) => {
+      this.client.setex(key, duration, String(value), (err) => {
+        if (err) return reject(err);
+        return resolve();
+      });
+    });
   }
 
-  async del(key) {
-    await this.client.del(key);
+  del(key) {
+    return new Promise((resolve, reject) => {
+      this.client.del(key, (err) => {
+        if (err) return reject(err);
+        return resolve();
+      });
+    });
   }
 }
 
